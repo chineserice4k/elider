@@ -1,5 +1,5 @@
 import discord
-from discord import client
+from discord import ChannelType
 from discord.ext import commands
 from colorama import Fore, Style
 import fade
@@ -18,7 +18,6 @@ token = ""
 r = f'{Fore.RESET}'
 status = True
 ########config 
-
 
 def logo():
   startup = (f"""
@@ -42,6 +41,7 @@ async def on_connect():
 
 
 
+
 @fp.command(aliases = ["help"])
 async def info(ctx):
     await ctx.message.delete()
@@ -49,8 +49,8 @@ async def info(ctx):
     help = (f"""
 Purge ; Purges your messages in the channel you typed the command in. Usage: ;purge amount. *
 Keypurge ; Looks for certain words in a channel and deletes them. Usage: ;keypurge amount. *
-Guildpurge ; Clears your messages in all guilds. Usage: ;guildpurge amount. *
-Keyguildpurge ; Clears every message in all joined guilds that have a certain word/s in them. Usage: ;guildpurge amount. *
+Guildpurge ; Clears your messages in all channels in the server the command was sent. Usage: ;guildpurge amount. *
+Keyguildpurge ; Clears every message in the guild the command was sent in that have a certain word/s in them. Usage: ;keyguildpurge amount. *
 Accountpurge ; Wipes every message on your account. DMs, GCs & Guilds. You will be asked to verify this action in the console. Usage: ;accountpurge
 *If amount is left blank, it will delete 100 messages.
 
@@ -120,13 +120,17 @@ async def keygpurge(ctx, amount:int = None):
   guild = ctx.message.guild
   for channel in guild.channels:
     if str(channel.type) == 'text':
-      messages = await channel.history(limit=amount).flatten()
-      for message in messages:
-        if any(word in message.content for word in keylist):
-          if message.author == fp.user:
-            await message.delete()
-            counter += 1
-  print(f"{Fore.YELLOW}Deleted {counter} messages.{r}")
+          messages = await ctx.channel.history(limit=amount).flatten()
+          for message in messages:
+            if any(word in message.content for word in keylist):
+              if message.author == fp.user:
+                try:
+                  await message.delete()
+                  counter += 1
+                  print(f"{Fore.YELLOW}Deleted {counter} messages.{r}")
+                except:
+                  pass
+  logo()              
 
 ########################################################account purge
 
@@ -168,3 +172,4 @@ try:
   fp.run(token, bot = False)
 except discord.LoginFailure:
   print(f"{Fore.RED} Token is invalid, please try again.")
+
