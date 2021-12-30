@@ -11,12 +11,11 @@ import requests
 
 ########config
 prefix = ";"
-fp = commands.Bot(command_prefix=prefix, self_bot=True)
 keylist = ['nigger', 'nigga', 'faggot', 'kys', 'dox', 'doxx', 'ddos']
-fp.remove_command("help")
-token = ""
+token = "NzM5OTg0NzAxMDExMjYzNTg4.YQDjOw.SBtc9dNWQ5gRgBr89mhuMkynOXY"
 r = f'{Fore.RESET}'
-status = True
+status = False
+timed = True #This will make your purge times a lot slower, but will lower your chances of getting caught by Discord.
 ########config 
 
 def logo():
@@ -31,6 +30,8 @@ def logo():
 """)
   faded_text = fade.fire(startup)
   print(faded_text)
+fp = commands.Bot(command_prefix=prefix, self_bot=True)
+fp.remove_command("help")
 
 
 @fp.event
@@ -38,7 +39,6 @@ async def on_connect():
   logo()
   if status == True:
     await fp.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="Currently hosting Elider."))
-
 
 
 
@@ -54,12 +54,12 @@ Keyguildpurge ; Clears every message in the guild the command was sent in that h
 Accountpurge ; Wipes every message on your account. DMs, GCs & Guilds. You will be asked to verify this action in the console. Usage: ;accountpurge
 *If amount is left blank, it will delete 100 messages.
 
-》»»»◈«««《 Aliases 》»»»◈«««《
-Purge ; chanpurge, clear
-Keypurge ; keychanpurge, kcpurge
-Guildpurge ; gpurge
+》»»»◈«««《 Aliases 》»»»◈«««《                                                    》»»»◈«««《 More Info 》»»»◈«««《
+Purge ; chanpurge, clear                                              Setting time to true will make each message deletion have short stops.
+Keypurge ; keychanpurge, kcpurge                                          If the discord tag given on the start screen does not work,
+Guildpurge ; gpurge                                                                Contact my email at marx@nuke.africa 
 Keyguildpurge ; keygpurge, kgpurge
-Accountpurge ; accpurge, apurge
+Accountpurge ; accpurge, apurge                                                    This is Beta Version 0.3 of Elider.
 """)
     faded_text = fade.fire(help)
     print(faded_text)
@@ -78,8 +78,13 @@ async def purge(ctx, amount:int = None):
   messages = await ctx.channel.history(limit=amount).flatten()
   for message in messages:
     if message.author == fp.user:
-      await message.delete()
-      counter += 1
+      if timed == True: 
+        await message.delete()
+        time.sleep(2)
+        counter += 1
+      if timed == False:   
+        await message.delete()
+        counter += 1
   print(f"{Fore.YELLOW}Deleted {counter} messages.{r}")
 
 @fp.command(aliases = ["keychanpurge",'kcpurge'])
@@ -91,8 +96,13 @@ async def keypurge(ctx, amount:int = None):
   for message in messages:
    if any(word in message.content for word in keylist):
       if message.author == fp.user:
-         await message.delete()
-         counter += 1
+       if timed == True: 
+        await message.delete()
+        time.sleep(2)
+        counter += 1
+      if timed == False:   
+        await message.delete()
+        counter += 1       
   print(f"{Fore.YELLOW}Deleted {counter} messages.{r}")
 
 ########################################################guild purge
@@ -106,10 +116,15 @@ async def gpurge(ctx, amount:int = None):
   for channel in guild.channels:
     if str(channel.type) == 'text':
       messages = await channel.history(limit=amount).flatten()
-      for message in messages:
+      for message in messages:        
         if message.author == fp.user:
+         if timed == True: 
           await message.delete()
+          time.sleep(2)
           counter += 1
+         if timed == False:   
+          await message.delete()
+          counter += 1               
   print(f"{Fore.YELLOW}Deleted {counter} messages.{r}")
 
 @fp.command(aliases = ["keyguildpurge", "kgpurge"])
@@ -124,12 +139,14 @@ async def keygpurge(ctx, amount:int = None):
           for message in messages:
             if any(word in message.content for word in keylist):
               if message.author == fp.user:
-                try:
+                if timed == True: 
                   await message.delete()
+                  time.sleep(2)
                   counter += 1
-                  print(f"{Fore.YELLOW}Deleted {counter} messages.{r}")
-                except:
-                  pass
+                if timed == False:   
+                  await message.delete()
+                  counter += 1   
+    print(f"{Fore.YELLOW}Deleted {counter} messages.{r}")
   logo()              
 
 ########################################################account purge
@@ -172,4 +189,3 @@ try:
   fp.run(token, bot = False)
 except discord.LoginFailure:
   print(f"{Fore.RED} Token is invalid, please try again.")
-
