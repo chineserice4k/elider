@@ -25,7 +25,7 @@ def logo():
     +:+        +:+            +:+     +:+    +:+ +:+        +:+    +:+        Creation date : {fp.user.created_at}
    +#++:++#   +#+            +#+     +#+    +:+ +#++:++#   +#++:++#:    
   +#+        +#+            +#+     +#+    +#+ +#+        +#+    +#+          A project created by chineserice.
- #+#        #+#            #+#     #+#    #+# #+#        #+#    #+#           For more info, contact chinese rice#8270 on Discord.
+ #+#        #+#            #+#     #+#    #+# #+#        #+#    #+#           For more info, contact opium#8270 on Discord.
 ########## ########## ########### #########  ########## ###    ###            Run ;help for command information.
 """)
   faded_text = fade.fire(startup)
